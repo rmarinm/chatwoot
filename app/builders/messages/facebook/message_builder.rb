@@ -43,7 +43,8 @@ class Messages::Facebook::MessageBuilder < Messages::Messenger::MessageBuilder
     return if contact.present?
 
     @contact = Contact.create!(contact_params.except(:remote_avatar_url))
-    @contact_inbox = ContactInbox.find_or_create_by!(contact: contact, inbox: @inbox, source_id: @sender_id)
+    @contact_inbox = ContactInbox.find_or_create_by!(inbox: @inbox, source_id: @sender_id)
+    @contact_inbox.update(contact: contact) if @contact_inbox.present? && contact.present?
   end
 
   def build_message
